@@ -12,18 +12,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# Emulate colcon in CLion
-if($ENV{CLION_IDE})
-  message(STATUS "Running inside CLion")
-  set(h264_msgs_DIR
-    "${PROJECT_SOURCE_DIR}/../../../install/h264_msgs/share/h264_msgs/cmake")
-  find_package(fastrtps_cmake_module REQUIRED)
-  set(FastRTPS_INCLUDE_DIR "/opt/ros/foxy/include")
-  set(FastRTPS_LIBRARY_RELEASE "/opt/ros/foxy/lib/libfastrtps.so")
-endif()
-
 find_package(ament_cmake REQUIRED)
-find_package(camera_calibration_parsers REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(h264_msgs REQUIRED)
 find_package(pluginlib REQUIRED)
@@ -66,26 +55,6 @@ ament_target_dependencies(
   sensor_msgs
 )
 
-add_executable(
-  h264_cam_node
-  src/h264_cam_node.cpp
-)
-
-ament_target_dependencies(
-  h264_cam_node
-  camera_calibration_parsers
-  h264_msgs
-  rclcpp
-)
-
-target_link_libraries(
-  h264_cam_node
-  ${PC_AVDEVICE_LIBRARIES}
-  ${PC_AVFORMAT_LIBRARIES}
-  ${PC_AVCODEC_LIBRARIES}
-  ${PC_AVUTIL_LIBRARIES}
-)
-
 # This will load & run linters listed in package.xml
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -93,7 +62,7 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  TARGETS ${PROJECT_NAME} h264_cam_node
+  TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib                 # Shared libraries must be in lib
   RUNTIME DESTINATION lib/${PROJECT_NAME} # Node executables must be in lib/<pkg>
