@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.12.2)
 
 project(h264_image_transport)
 
-# Default to C++14
+# Default to C++17
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
+  set(CMAKE_CXX_STANDARD 17)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -12,12 +12,17 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+<<<<<<< HEAD
 find_package(ament_cmake REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(h264_msgs REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
+=======
+find_package(ament_cmake_auto REQUIRED)
+ament_auto_find_build_dependencies()
+>>>>>>> e8699d6a7b408a95ef267098a1bfaed11aee0d60
 
 # Find ffmpeg libraries
 find_package(PkgConfig)
@@ -27,14 +32,10 @@ pkg_check_modules(PC_AVCODEC REQUIRED libavcodec>=58)
 pkg_check_modules(PC_AVUTIL REQUIRED libavutil>=56)
 pkg_check_modules(PC_SWSCALE REQUIRED libswscale>=5)
 
-add_library(
+ament_auto_add_library(
   ${PROJECT_NAME} SHARED
   src/h264_subscriber.cpp
   src/manifest.cpp
-)
-
-include_directories(
-  include
 )
 
 target_link_libraries(
@@ -46,6 +47,7 @@ target_link_libraries(
   ${PC_SWSCALE_LIBRARIES}
 )
 
+<<<<<<< HEAD
 ament_target_dependencies(
   ${PROJECT_NAME}
   h264_msgs
@@ -53,6 +55,19 @@ ament_target_dependencies(
   rclcpp
   pluginlib
   sensor_msgs
+=======
+ament_auto_add_executable(
+  h264_cam_node
+  src/h264_cam_node.cpp
+)
+
+target_link_libraries(
+  h264_cam_node
+  ${PC_AVDEVICE_LIBRARIES}
+  ${PC_AVFORMAT_LIBRARIES}
+  ${PC_AVCODEC_LIBRARIES}
+  ${PC_AVUTIL_LIBRARIES}
+>>>>>>> e8699d6a7b408a95ef267098a1bfaed11aee0d60
 )
 
 # This will load & run linters listed in package.xml
@@ -80,4 +95,8 @@ install(
 
 pluginlib_export_plugin_description_file(image_transport h264_plugins.xml)
 
+<<<<<<< HEAD
 ament_package()
+=======
+ament_auto_package()
+>>>>>>> e8699d6a7b408a95ef267098a1bfaed11aee0d60
