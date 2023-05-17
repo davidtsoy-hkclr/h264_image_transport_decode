@@ -165,7 +165,7 @@ void H264Subscriber::internalCallback(
     SWS_FAST_BILINEAR, nullptr, nullptr, nullptr);
 
   // Copy and convert from YUYV420P to BGR24
-  image->data.resize(p_frame_->width * p_frame_->height * 3);
+  image->data.resize(p_frame_->width * p_frame_->height * 3 + 16);
   int stride = 3 * p_frame_->width;
   uint8_t * destination = &image->data[0];
   sws_scale(
