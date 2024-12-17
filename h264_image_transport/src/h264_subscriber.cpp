@@ -165,8 +165,7 @@ void H264Subscriber::internalCallback(
     SWS_FAST_BILINEAR, nullptr, nullptr, nullptr);
 
   // Copy and convert from YUYV420P to BGR24
-  // TODO REMOVE 16 ONCE WHAT IS WRONG IS FIGURED OUT
-  image->data.resize(p_frame_->width * p_frame_->height * 3 + 16);
+  image->data.resize(p_frame_->width * p_frame_->height * 3);
   int stride = 3 * p_frame_->width;
   uint8_t * destination = &image->data[0];
   sws_scale(
